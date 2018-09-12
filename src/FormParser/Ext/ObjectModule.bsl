@@ -90,6 +90,7 @@ Function Kinds() Export
 	Kinds.Insert("String", New TypeDescription("String"));
 	Kinds.Insert("Boolean", New TypeDescription("Boolean"));
 	Kinds.Insert("Decimal", New TypeDescription("Number"));
+	Kinds.Insert("DateTime", "String");
 	Kinds.Insert("UUID", "String");
 
 	// simple
@@ -99,6 +100,7 @@ Function Kinds() Export
 	Kinds.Insert("LFEDataPath", "String");
 	Kinds.Insert("QName", "String");
 	Kinds.Insert("base64Binary", "String");
+	Kinds.Insert("Field", "String");
 
 	// common
 	Kinds.Insert("LocalStringType", LocalStringType());
@@ -106,7 +108,14 @@ Function Kinds() Export
 
 	// form
 	Kinds.Insert("Form", Form());
-	Kinds.Insert("Items", ChildItems());
+	Kinds.Insert("ChildItems", ChildItems());
+
+	Kinds.Insert("ContextMenu", ContextMenu());
+	Kinds.Insert("AutoCommandBar", AutoCommandBar());
+	Kinds.Insert("LabelDecoration", LabelDecoration());
+	Kinds.Insert("SearchStringAddition", SearchStringAddition());
+	Kinds.Insert("ViewStatusAddition", ViewStatusAddition());
+	Kinds.Insert("SearchControlAddition", SearchControlAddition());
 
 	Resolve(Kinds, Kinds);
 
@@ -225,12 +234,12 @@ EndFunction // FormVisualEntity()
 
 Function PredefinedChildItems()
 	This = Record();
-	This["ContextMenu"]           = ContextMenu();
-	This["AutoCommandBar"]        = AutoCommandBar();
-	This["ExtendedTooltip"]       = LabelDecoration();
-	This["SearchStringAddition"]  = SearchStringAddition();
-	This["ViewStatusAddition"]    = ViewStatusAddition();
-	This["SearchControlAddition"] = SearchControlAddition();
+	This["ContextMenu"]           = "ContextMenu";
+	This["AutoCommandBar"]        = "AutoCommandBar";
+	This["ExtendedTooltip"]       = "LabelDecoration";
+	This["SearchStringAddition"]  = "SearchStringAddition";
+	This["ViewStatusAddition"]    = "ViewStatusAddition";
+	This["SearchControlAddition"] = "SearchControlAddition";
 	Return This;
 EndFunction // PredefinedChildItems()
 
@@ -495,6 +504,7 @@ Function FormCommands()
 EndFunction // FormCommands()
 
 Function FormCommand()
+	This = Record();
 	This["name"]                     = "String";
 	This["id"]                       = "Decimal";
 	This["Title"]                    = "LocalStringType";
@@ -711,8 +721,8 @@ Function CalendarField()
 	This["SelectionMode"]               = "String"; //Enums.FormDateSelectionMode;
 	This["ShowCurrentDate"]             = "Boolean";
 	This["CalendarNavigation"]          = "Boolean";
-	This["BeginOfRepresentationPeriod"] = "dateTime";
-	This["EndOfRepresentationPeriod"]   = "dateTime";
+	This["BeginOfRepresentationPeriod"] = "DateTime";
+	This["EndOfRepresentationPeriod"]   = "DateTime";
 	This["EnableStartDrag"]             = "Boolean";
 	This["EnableDrag"]                  = "Boolean";
 	This["Font"]                        = Font();
@@ -904,20 +914,20 @@ Function InputField()
 	This["Mask"]                          = "String";
 	This["AutoChoiceIncomplete"]          = "String"; //Enums.BWAValue;
 	This["QuickChoice"]                   = "String"; //Enums.BWAValue;
-	This["ChoiceFoldersAndItems"]         = "FoldersAndItems";
+	This["ChoiceFoldersAndItems"]         = "String"; //Enums.FoldersAndItems;
 	This["Format"]                        = "LocalStringType";
 	This["EditFormat"]                    = "LocalStringType";
 	This["AutoMarkIncomplete"]            = "String"; //Enums.BWAValue;
 	This["ChooseType"]                    = "Boolean";
-	This["IncompleteChoiceMode"]          = "IncompleteItemChoiceMode";
+	This["IncompleteChoiceMode"]          = "String"; //Enums.IncompleteItemChoiceMode;
 	This["TypeDomainEnabled"]             = "Boolean";
 	This["TextEdit"]                      = "Boolean";
-	This["EditTextUpdate"]                = "EditTextUpdate";
+	This["EditTextUpdate"]                = "String"; //Enums.EditTextUpdate;
 	//This["MinValue"]                      = "";
 	//This["MaxValue"]                      = "";
 	This["ChoiceForm"]                    = "MDObjectRef";
-	This["ChoiceParameterLinks"]          = "ChoiceParameterLinks";
-	This["ChoiceParameters"]              = "ChoiceParameters";
+	This["ChoiceParameterLinks"]          = ChoiceParameterLinks();
+	This["ChoiceParameters"]              = ChoiceParameters();
 	This["AvailableTypes"]                = "TypeDescription";
 	This["ListChoiceMode"]                = "Boolean";
 	This["ChoiceList"]                    = ValueList();
@@ -928,17 +938,17 @@ Function InputField()
 	This["BackColor"]                     = "String"; //Color
 	This["BorderColor"]                   = "String"; //Color
 	This["Font"]                          = Font();
-	This["TypeLink"]                      = "TypeLink";
-	This["HeightControlVariant"]          = "HeightControlVariant";
-	This["AutoShowClearButtonMode"]       = "AutoShowClearButtonMode";
-	This["AutoShowOpenButtonMode"]        = "AutoShowOpenButtonMode";
-	This["AutoCorrectionOnTextInput"]     = "AutoCorrectionOnTextInput";
-	This["SpellCheckingOnTextInput"]      = "SpellCheckingOnTextInput";
-	This["AutoCapitalizationOnTextInput"] = "AutoCapitalizationOnTextInput";
-	This["SpecialTextInputMode"]          = "SpecialTextInputMode";
-	This["OnScreenKeyboardReturnKeyText"] = "OnScreenKeyboardReturnKeyText";
+	This["TypeLink"]                      = TypeLink();
+	This["HeightControlVariant"]          = "String"; //Enums.HeightControlVariant;
+	This["AutoShowClearButtonMode"]       = "String"; //Enums.AutoShowClearButtonMode;
+	This["AutoShowOpenButtonMode"]        = "String"; //Enums.AutoShowOpenButtonMode;
+	This["AutoCorrectionOnTextInput"]     = "String"; //Enums.AutoCorrectionOnTextInput;
+	This["SpellCheckingOnTextInput"]      = "String"; //Enums.SpellCheckingOnTextInput;
+	This["AutoCapitalizationOnTextInput"] = "String"; //Enums.AutoCapitalizationOnTextInput;
+	This["SpecialTextInputMode"]          = "String"; //Enums.SpecialTextInputMode;
+	This["OnScreenKeyboardReturnKeyText"] = "String"; //Enums.OnScreenKeyboardReturnKeyText;
 	This["InputHint"]                     = "LocalStringType";
-	This["ChoiceHistoryOnInput"]          = "ChoiceHistoryOnInput";
+	This["ChoiceHistoryOnInput"]          = "String"; //Enums.ChoiceHistoryOnInput;
 	Return This;
 EndFunction // InputField()
 
@@ -997,7 +1007,7 @@ EndFunction // Page()
 
 Function Pages()
 	This = Record(GroupBase());
-	This["PagesRepresentation"] = "FormPagesRepresentation";
+	This["PagesRepresentation"] = "String"; //Enums.FormPagesRepresentation;
 	Return This;
 EndFunction // Pages()
 
@@ -1021,7 +1031,7 @@ EndFunction // PeriodField()
 Function PictureDecoration()
 	This = Record(Decoration());
 	This["Picture"]                = Picture();
-	This["PictureSize"]            = "PictureSize";
+	This["PictureSize"]            = "String"; //Enums.PictureSize;
 	This["Hyperlink"]              = "Boolean";
 	This["Zoomable"]               = "Boolean";
 	This["NonselectedPictureText"] = "LocalStringType";
@@ -1043,7 +1053,7 @@ Function PictureField()
 	This["MaxHeight"]              = "Decimal";
 	This["HorizontalStretch"]      = "Boolean";
 	This["VerticalStretch"]        = "Boolean";
-	This["PictureSize"]            = "PictureSize";
+	This["PictureSize"]            = "String"; //Enums.PictureSize;
 	This["Zoomable"]               = "Boolean";
 	This["Hyperlink"]              = "Boolean";
 	This["NonselectedPictureText"] = "LocalStringType";
@@ -1079,7 +1089,7 @@ Function Popup()
 	This["CommandSource"]       = "String"; //CommandSourceName
 	This["Representation"]      = "String"; //Enums.ButtonRepresentation;
 	This["PlacementArea"]       = "String"; //Enums.MenuElementPlacementArea;
-	This["Shape"]               = "ButtonShape";
+	This["Shape"]               = "String"; //Enums.ButtonShape;
 	This["ShapeRepresentation"] = "String"; //Enums.ButtonShapeRepresentation;
 	This["BackColor"]           = "String"; //Color
 	This["BorderColor"]         = "String"; //Color
@@ -1163,27 +1173,27 @@ Function SpreadSheetDocumentField()
 	This["VerticalStretch"]       = "Boolean";
 	This["ShowGrid"]              = "Boolean";
 	This["ShowHeaders"]           = "Boolean";
-	This["VerticalScrollBar"]     = "SpreadSheetDocumentScrollBarUse";
-	This["HorizontalScrollBar"]   = "SpreadSheetDocumentScrollBarUse";
+	This["VerticalScrollBar"]     = "String"; //SpreadSheetDocumentScrollBarUse
+	This["HorizontalScrollBar"]   = "String"; //SpreadSheetDocumentScrollBarUse
 	This["BlackAndWhiteView"]     = "Boolean";
 	This["Protection"]            = "Boolean";
-	This["SelectionShowMode"]     = "SelectionShowMode";
+	This["SelectionShowMode"]     = "String"; //Enums.SelectionShowMode;
 	This["Output"]                = "String"; //Enums.UseOutput;
 	This["Edit"]                  = "Boolean";
 	This["ShowGroups"]            = "Boolean";
 	This["EnableStartDrag"]       = "Boolean";
 	This["EnableDrag"]            = "Boolean";
 	This["BorderColor"]           = "String"; //Color
-	This["ViewScalingMode"]       = "ViewScalingMode";
+	This["ViewScalingMode"]       = "String"; //Enums.ViewScalingMode;
 	This["ShowCellNames"]         = "Boolean";
 	This["ShowRowAndColumnNames"] = "Boolean";
-	This["PointerType"]           = "SpreadsheetDocumentPointerType";
+	This["PointerType"]           = "String"; //Enums.SpreadsheetDocumentPointerType;
 	Return This;
 EndFunction // SpreadSheetDocumentField()
 
 Function Table()
 	This = Record(FormItemBase());
-	This["Representation"]                          = "TableRepresentation";
+	This["Representation"]                          = "String"; //Enums.TableRepresentation;
 	This["Visible"]                                 = "Boolean";
 	This["UserVisible"]                             = "String"; //AdjustableBoolean
 	This["CommandBarLocation"]                      = "String"; //Enums.FormElementCommandBarLocation;
@@ -1202,20 +1212,20 @@ Function Table()
 	This["AutoMaxHeight"]                           = "Boolean";
 	This["MaxHeight"]                               = "Decimal";
 	This["HeightInTableRows"]                       = "Decimal";
-	This["HeightControlVariant"]                    = "TableHeightControlVariant";
+	This["HeightControlVariant"]                    = "String"; //Enums.TableHeightControlVariant;
 	This["AutoMaxRowsCount"]                        = "Boolean";
 	This["MaxRowsCount"]                            = "Decimal";
 	This["ChoiceMode"]                              = "Boolean";
 	This["MultipleChoice"]                          = "Boolean";
-	This["RowInputMode"]                            = "TableRowInputMode";
-	This["SelectionMode"]                           = "TableSelectionMode";
-	This["RowSelectionMode"]                        = "TableRowSelectionMode";
+	This["RowInputMode"]                            = "String"; //Enums.TableRowInputMode;
+	This["SelectionMode"]                           = "String"; //Enums.TableSelectionMode;
+	This["RowSelectionMode"]                        = "String"; //Enums.TableRowSelectionMode;
 	This["Header"]                                  = "Boolean";
 	This["HeaderHeight"]                            = "Decimal";
 	This["Footer"]                                  = "Boolean";
 	This["FooterHeight"]                            = "Decimal";
-	This["HorizontalScrollBar"]                     = "TableScrollBarUse";
-	This["VerticalScrollBar"]                       = "TableScrollBarUse";
+	This["HorizontalScrollBar"]                     = "String"; //Enums.TableScrollBarUse;
+	This["VerticalScrollBar"]                       = "String"; //Enums.TableScrollBarUse;
 	This["HorizontalLines"]                         = "Boolean";
 	This["VerticalLines"]                           = "Boolean";
 	This["FixedLeft"]                               = "Decimal";
@@ -1224,9 +1234,9 @@ Function Table()
 	This["AutoInsertNewRow"]                        = "Boolean";
 	This["AutoAddIncomplete"]                       = "String"; //Enums.BWAValue;
 	This["AutoMarkIncomplete"]                      = "String"; //Enums.BWAValue;
-	This["SearchOnInput"]                           = "SearchOnInput";
-	This["InitialListView"]                         = "TableInitialListView";
-	This["InitialTreeView"]                         = "TableInitialTreeView";
+	This["SearchOnInput"]                           = "String"; //Enums.SearchOnInput;
+	This["InitialListView"]                         = "String"; //Enums.TableInitialListView;
+	This["InitialTreeView"]                         = "String"; //Enums.TableInitialTreeView;
 	This["Output"]                                  = "String"; //Enums.UseOutput;
 	This["HorizontalStretch"]                       = "Boolean";
 	This["VerticalStretch"]                         = "Boolean";
@@ -1248,13 +1258,13 @@ Function Table()
 	This["CommandSet"]                              = CommandsContent();
 	This["ToolTip"]                                 = "LocalStringType";
 	This["ToolTipRepresentation"]                   = "String"; //Enums.TooltipRepresentation;
-	This["SearchStringLocation"]                    = "SearchStringLocation";
-	This["ViewStatusLocation"]                      = "ViewStatusLocation";
-	This["SearchControlLocation"]                   = "SearchControlLocation";
+	This["SearchStringLocation"]                    = "String"; //Enums.SearchStringLocation;
+	This["ViewStatusLocation"]                      = "String"; //Enums.ViewStatusLocation;
+	This["SearchControlLocation"]                   = "String"; //Enums.SearchControlLocation;
 	This["GroupHorizontalAlign"]                    = "String"; //Enums.ItemHorizontalAlignment;
 	This["GroupVerticalAlign"]                      = "String"; //Enums.ItemVerticalAlignment;
-	This["RefreshRequest"]                          = "RefreshRequestMethod";
-	This["ViewMode"]                                = "DataCompositionSettingsViewMode";
+	This["RefreshRequest"]                          = "String"; //Enums.RefreshRequestMethod;
+	This["ViewMode"]                                = "String"; //Enums.DataCompositionSettingsViewMode;
 	This["SettingsNamedItemDetailedRepresentation"] = "Boolean";
 	This["AutoRefresh"]                             = "Boolean";
 	This["AutoRefreshPeriod"]                       = "Decimal";
@@ -1306,7 +1316,7 @@ Function TrackBarField()
 	This["LargeStep"]         = "Decimal";
 	This["MarkingStep"]       = "Decimal";
 	This["Orientation"]       = "String"; //Enums.FormElementOrientation;
-	This["MarkingAppearance"] = "MarkingStyle";
+	This["MarkingAppearance"] = "String"; //Enums.MarkingStyle;
 	This["BorderColor"]       = "String"; //Color
 	Return This;
 EndFunction // TrackBarField()
@@ -1367,7 +1377,7 @@ Function Font()
 	This["italic"]    = "Boolean";
 	This["underline"] = "Boolean";
 	This["strikeout"] = "Boolean";
-	This["kind"]      = "FontType";
+	This["kind"]      = "String"; //Enums.FontType;
 	This["scale"]     = "Decimal";
 	Return This;
 EndFunction // Font()
@@ -1410,7 +1420,7 @@ Function ValueListItem()
 	This = Record();
 	This["Presentation"] = "String";
 	This["CheckState"]   = "Decimal";
-	This["Value"]        = "";
+	//This["Value"]        = "";
 	Return This;
 EndFunction // ValueListItem()
 
@@ -1434,6 +1444,42 @@ Function Picture()
 	This["_"]   = "base64Binary";
 	Return This;
 EndFunction // Picture()
+
+Function ChoiceParameterLinks()
+	This = Object();
+	Items = This.Items;
+	Items["item"] = ChoiceParameterLink();
+	Return This;
+EndFunction // ChoiceParameterLinks()
+
+Function ChoiceParameterLink()
+	This = Record();
+	This["choiceParameter"] = "String";
+	This["value"]           = "Field";
+	//This["mode"]          = "";
+	Return This;
+EndFunction // ChoiceParameterLink()
+
+Function ChoiceParameters()
+	This = Object();
+	Items = This.Items;
+	Items["item"] = ChoiceParameter();
+	Return This;
+EndFunction // ChoiceParameters()
+
+Function ChoiceParameter()
+	This = Record();
+	This["choiceParameter"] = "String";
+	//This["value"] = "";
+	Return This;
+EndFunction // ChoiceParameter()
+
+Function TypeLink()
+	This = Record();
+	This["field"]    = "Field";
+	This["linkItem"] = "Decimal";
+	Return This;
+EndFunction // TypeLink()
 
 #EndRegion // Other
 
