@@ -52,29 +52,44 @@ Function ParseRecord(XMLReader, Kinds, Kind, ReadToMap)
 EndFunction // ParseRecord()
 
 Function ParseObject(XMLReader, Kinds, Kind, ReadToMap)
-	Data = ?(ReadToMap, New Map, New Structure);
-	Attributes = Kind.Attributes;
-	While XMLReader.ReadAttribute() Do
-		AttributeName = XMLReader.LocalName;
-		AttributeKind = Attributes[AttributeName];
-		If AttributeKind <> Undefined Then
-			Data.Insert(AttributeName, AttributeKind.AdjustValue(XMLReader.Value));
-		EndIf;
-	EndDo;
-	Items = Kind.Items;
-	For Each Item In Items Do
-		Data.Insert(Item.Key, New Array);
-	EndDo;
-	While XMLReader.Read() // node beg | parent end | none
-		And XMLReader.NodeType = XMLNodeType.StartElement Do
-		ItemName = XMLReader.LocalName;
-		ItemKind = Items[ItemName];
-		If ItemKind = Undefined Then
-			XMLReader.Skip(); // node end
-		Else
-			Data[ItemName].Add(Parse(XMLReader, Kinds, ItemKind, ReadToMap));
-		EndIf;
-	EndDo;
+	If Kind.Ordered Then
+		Data = New Array;
+		Items = Kind.Items;
+		While XMLReader.Read() // node beg | parent end | none
+			And XMLReader.NodeType = XMLNodeType.StartElement Do
+			ItemName = XMLReader.LocalName;
+			ItemKind = Items[ItemName];
+			If ItemKind = Undefined Then
+				XMLReader.Skip(); // node end
+			Else
+				Data.Add(New Structure("Type, Data", ItemName, Parse(XMLReader, Kinds, ItemKind, ReadToMap)));
+			EndIf;
+		EndDo;
+	Else
+		Data = ?(ReadToMap, New Map, New Structure);
+		Attributes = Kind.Attributes;
+		While XMLReader.ReadAttribute() Do
+			AttributeName = XMLReader.LocalName;
+			AttributeKind = Attributes[AttributeName];
+			If AttributeKind <> Undefined Then
+				Data.Insert(AttributeName, AttributeKind.AdjustValue(XMLReader.Value));
+			EndIf;
+		EndDo;
+		Items = Kind.Items;
+		For Each Item In Items Do
+			Data.Insert(Item.Key, New Array);
+		EndDo;
+		While XMLReader.Read() // node beg | parent end | none
+			And XMLReader.NodeType = XMLNodeType.StartElement Do
+			ItemName = XMLReader.LocalName;
+			ItemKind = Items[ItemName];
+			If ItemKind = Undefined Then
+				XMLReader.Skip(); // node end
+			Else
+				Data[ItemName].Add(Parse(XMLReader, Kinds, ItemKind, ReadToMap));
+			EndIf;
+		EndDo;
+	EndIf;
 	Return Data;
 EndFunction // ParseObject()
 
@@ -153,6 +168,7 @@ EndFunction // Record()
 
 Function Object(Base = Undefined)
 	Object = New Structure;
+	Object.Insert("Ordered", False);
 	Object.Insert("Attributes", New Map);
 	Object.Insert("Items", New Map);
 	If Base <> Undefined Then
@@ -612,6 +628,7 @@ EndFunction // AdditionSource()
 
 Function ChildItems()
 	This = Object();
+	This.Ordered = True;
 	Items = This.Items;
 	Items["AutoCommandBar"]           = AutoCommandBar();
 	Items["Button"]                   = Button();
