@@ -109,6 +109,7 @@ Function Kinds() Export
 	// form
 	Kinds.Insert("Form", Form());
 	Kinds.Insert("ChildItems", ChildItems());
+	Kinds.Insert("FormItemEvents", FormItemEvents());
 
 	Kinds.Insert("ContextMenu", ContextMenu());
 	Kinds.Insert("AutoCommandBar", AutoCommandBar());
@@ -227,8 +228,8 @@ EndFunction // BinaryDataQualifiers()
 
 Function FormVisualEntity()
 	This = Record(PredefinedChildItems());
-	This["Events"]     = FormItemEvents();
-	This["ChildItems"] =  "ChildItems";
+	This["Events"]     = "FormItemEvents";
+	This["ChildItems"] = "ChildItems";
 	Return This;
 EndFunction // FormVisualEntity()
 
@@ -303,7 +304,7 @@ EndFunction // FormItemBase()
 Function GroupBase()
 	This = Record(FormItemBase());
 	This["Visible"]                  = "Boolean";
-	This["UserVisible"]              = "String"; //AdjustableBoolean
+	This["UserVisible"]              = AdjustableBoolean();
 	This["Enabled"]                  = "Boolean";
 	This["ReadOnly"]                 = "Boolean";
 	This["EnableContentChange"]      = "Boolean";
@@ -312,7 +313,7 @@ Function GroupBase()
 	This["TitleFont"]                = Font();
 	This["ToolTip"]                  = "LocalStringType";
 	This["ToolTipRepresentation"]    = "String"; //Enums.TooltipRepresentation;
-	This["Shortcut"]                 = ShortCutType();
+	This["Shortcut"]                 = "String";
 	This["Width"]                    = "Decimal";
 	This["Height"]                   = "Decimal";
 	This["HorizontalStretch"]        = "String"; //Enums.BWAValue;
@@ -325,7 +326,7 @@ EndFunction // GroupBase()
 Function Decoration()
 	This = Record(FormItemBase());
 	This["Visible"]               = "Boolean";
-	This["UserVisible"]           = "String"; //AdjustableBoolean
+	This["UserVisible"]           = AdjustableBoolean();
 	This["Enabled"]               = "Boolean";
 	This["Width"]                 = "Decimal";
 	This["AutoMaxWidth"]          = "Boolean";
@@ -339,7 +340,7 @@ Function Decoration()
 	This["SkipOnInput"]           = "String"; //Enums.BWAValue;
 	This["TextColor"]             = "String"; //Color
 	This["Font"]                  = Font();
-	This["Shortcut"]              = ShortCutType();
+	This["Shortcut"]              = "String";
 	This["Title"]                 = FormattedStringType();
 	This["ToolTip"]               = "LocalStringType";
 	This["ToolTipRepresentation"] = "String"; //Enums.TooltipRepresentation;
@@ -352,7 +353,7 @@ Function Field()
 	This = Record(FormItemBase());
 	This["DataPath"]                    = "LFEDataPath";
 	This["Visible"]                     = "Boolean";
-	This["UserVisible"]                 = "String"; //AdjustableBoolean
+	This["UserVisible"]                 = AdjustableBoolean();
 	This["DefaultItem"]                 = "Boolean";
 	This["Enabled"]                     = "Boolean";
 	This["ReadOnly"]                    = "Boolean";
@@ -367,7 +368,7 @@ Function Field()
 	This["ToolTipRepresentation"]       = "String"; //Enums.TooltipRepresentation;
 	This["WarningOnEditRepresentation"] = "String"; //Enums.WarningOnEditRepresentation;
 	This["WarningOnEdit"]               = "LocalStringType";
-	This["Shortcut"]                    = ShortCutType();
+	This["Shortcut"]                    = "String";
 	This["CommandSet"]                  = CommandsContent();
 	This["HorizontalAlign"]             = "String"; //Enums.ItemHorizontalAlignment;
 	This["VerticalAlign"]               = "String"; //Enums.ItemVerticalAlignment;
@@ -392,8 +393,9 @@ Function Field()
 EndFunction // Field()
 
 Function CommandsContent()
-	This = Record();
-	This["ExcludedCommand"] = "String";
+	This = Object();
+	Items = This.Items;
+	Items["ExcludedCommand"] = "String";
 	Return This;
 EndFunction // CommandsContent()
 
@@ -432,8 +434,8 @@ Function FormAttribute()
 	This["id"]                = "Decimal";
 	This["Type"]              = TypeDescription();
 	This["Title"]             = "LocalStringType";
-	This["View"]              = "String"; //AdjustableBoolean;
-	This["Edit"]              = "String"; //AdjustableBoolean;
+	This["View"]              = AdjustableBoolean();
+	This["Edit"]              = AdjustableBoolean();
 	This["MainAttribute"]     = "Boolean";
 	This["SavedData"]         = "Boolean";
 	This["FillCheck"]         = "String"; //Enums.FillChecking
@@ -483,8 +485,8 @@ Function FormAttributeColumn()
 	This["name"]              = "String";
 	This["id"]                = "Decimal";
 	This["Title"]             = "LocalStringType";
-	This["View"]              = "String"; //AdjustableBoolean;
-	This["Edit"]              = "String"; //AdjustableBoolean;
+	This["View"]              = AdjustableBoolean();
+	This["Edit"]              = AdjustableBoolean();
 	This["FillCheck"]         = "String"; //Enums.FillChecking
 	This["FunctionalOptions"] = FunctionalOptions();
 	Return This;
@@ -509,8 +511,8 @@ Function FormCommand()
 	This["id"]                       = "Decimal";
 	This["Title"]                    = "LocalStringType";
 	This["ToolTip"]                  = "LocalStringType";
-	This["Use"]                      = "String"; //AdjustableBoolean;
-	This["Shortcut"]                 = ShortCutType();
+	This["Use"]                      = AdjustableBoolean();
+	This["Shortcut"]                 = "String";
 	This["Picture"]                  = Picture();
 	This["Action"]                   = FormCommandAction();
 	This["FunctionalOptions"]        = FunctionalOptions();
@@ -554,7 +556,7 @@ Function FormCommandInterfaceItem()
 	This["CommandGroup"]   = "String";
 	This["Index"]          = "Decimal";
 	This["DefaultVisible"] = "Boolean";
-	This["Visible"]        = "String"; //AdjustableBoolean;
+	This["Visible"]        = AdjustableBoolean();
 	Return This;
 EndFunction // FormCommandInterfaceItem()
 
@@ -586,7 +588,7 @@ Function Addition()
 	This["Source"]                = AdditionSource();
 	This["AdditionSource"]        = AdditionSource();
 	This["Visible"]               = "Boolean";
-	This["UserVisible"]           = "String"; //AdjustableBoolean
+	This["UserVisible"]           = AdjustableBoolean();
 	This["Enabled"]               = "Boolean";
 	This["PlacementArea"]         = "String"; //Enums.MenuElementPlacementArea;
 	This["Title"]                 = "LocalStringType";
@@ -663,7 +665,7 @@ Function Button()
 	This["CommandName"]                 = "String";
 	//This["Parameter"]                   = "";
 	This["Visible"]                     = "Boolean";
-	This["UserVisible"]                 = "String"; //AdjustableBoolean
+	This["UserVisible"]                 = AdjustableBoolean();
 	This["Representation"]              = "String"; //Enums.ButtonRepresentation;
 	This["DefaultButton"]               = "Boolean";
 	This["SkipOnInput"]                 = "String"; //Enums.BWAValue;
@@ -687,7 +689,7 @@ Function Button()
 	This["BackColor"]                   = "String"; //Color
 	This["BorderColor"]                 = "String"; //Color
 	This["Font"]                        = Font();
-	This["Shortcut"]                    = ShortCutType();
+	This["Shortcut"]                    = "String";
 	This["Picture"]                     = Picture();
 	This["Title"]                       = "LocalStringType";
 	This["TitleHeight"]                 = "Decimal";
@@ -1195,7 +1197,7 @@ Function Table()
 	This = Record(FormItemBase());
 	This["Representation"]                          = "String"; //Enums.TableRepresentation;
 	This["Visible"]                                 = "Boolean";
-	This["UserVisible"]                             = "String"; //AdjustableBoolean
+	This["UserVisible"]                             = AdjustableBoolean();
 	This["CommandBarLocation"]                      = "String"; //Enums.FormElementCommandBarLocation;
 	This["Autofill"]                                = "Boolean";
 	This["Enabled"]                                 = "Boolean";
@@ -1254,7 +1256,7 @@ Function Table()
 	This["TitleFont"]                               = Font();
 	This["TitleTextColor"]                          = "String"; //Color
 	This["TitleLocation"]                           = "String"; //Enums.FormElementTitleLocation;
-	This["Shortcut"]                                = ShortCutType();
+	This["Shortcut"]                                = "String";
 	This["CommandSet"]                              = CommandsContent();
 	This["ToolTip"]                                 = "LocalStringType";
 	This["ToolTipRepresentation"]                   = "String"; //Enums.TooltipRepresentation;
@@ -1382,17 +1384,6 @@ Function Font()
 	Return This;
 EndFunction // Font()
 
-Function ShortCutType()
-	This = Object();
-	Attributes = This.Attributes;
-	Attributes["Alt"]   = "Boolean";
-	Attributes["Ctrl"]  = "Boolean";
-	Attributes["Shift"] = "Boolean";
-	Items = This.Items;
-	Items["Key"] = "String"; //Enums.Key;
-	Return This;
-EndFunction // ShortCutType()
-
 Function Border()
 	This = Record();
 	This["ref"]   = "String"; //StyleRef
@@ -1480,6 +1471,21 @@ Function TypeLink()
 	This["linkItem"] = "Decimal";
 	Return This;
 EndFunction // TypeLink()
+
+Function AdjustableBoolean()
+	This = Object();
+	Items = This.Items;
+	Items["Common"] = "Boolean";
+	Items["Value"]  = AdjustableBooleanItemType();
+	Return This;
+EndFunction // AdjustableBoolean()
+
+Function AdjustableBooleanItemType()
+	This = Record();
+	This["name"] = "MDObjectRef";
+	This["_"]    = "Boolean";
+	Return This;
+EndFunction // AdjustableBooleanItemType()
 
 #EndRegion // Other
 
